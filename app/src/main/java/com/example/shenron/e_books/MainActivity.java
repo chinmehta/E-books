@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     BookAdapter mAdapter;
     TextView mTextView;
     int BOOK_LOADER_ID=0;
-    String url = getURL();
+    String url;
 
 
 
@@ -44,14 +44,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
 
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                url= getURL();
                 connect();
             }
         });
-
-
 
     }
 
@@ -90,9 +90,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         {
             keyword = mEditText.getText().toString();
             Toast.makeText(MainActivity.this, "Search in process ..", Toast.LENGTH_SHORT).show();
-            String temp ;
-            temp = "https://www.googleapis.com/books/v1/volumes?q=" + keyword;
-            return temp;
+            return  "https://www.googleapis.com/books/v1/volumes?"+"q=" + keyword;
         }
         else {
             mTextView.setText("NO RESULT FOUND");
@@ -109,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> BOOKS) {
-        mTextView.setText("NO RESULT FOUND");
         mAdapter.clear();
 
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
