@@ -7,6 +7,7 @@ import android.util.StringBuilderPrinter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -136,6 +137,7 @@ public class QueryUtils
         }
 
         List<Book> books = new ArrayList<>();
+        String authorList = "";
 
         // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
@@ -150,9 +152,20 @@ public class QueryUtils
                 JSONObject currentBook = bookArray.getJSONObject(i);
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
                 String title = volumeInfo.getString("title");
-                String author = volumeInfo.getString("authors");
+                JSONArray author = volumeInfo.getJSONArray("authors");
 
-                Book mBook = new Book(title,author);
+
+                if(author.length()>1)
+                {
+                    authorList = author.join(", ").replaceAll("\"", "");
+                }
+                else if (author.length() == 1) {
+                    authorList = author.getString(0);
+                } else if (author.length() == 0) {
+                    authorList = "";
+                }
+
+                Book mBook = new Book(title,authorList);
                 books.add(mBook);
             }
         }
