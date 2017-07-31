@@ -155,6 +155,7 @@ public class QueryUtils
                 JSONArray author = volumeInfo.getJSONArray("authors");
 
 
+
                 if(author.length()>1)
                 {
                     authorList = author.join(", ").replaceAll("\"", "");

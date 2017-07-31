@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
                 url= getURL();
+                mAdapter.clear();
                 connect();
             }
         });
