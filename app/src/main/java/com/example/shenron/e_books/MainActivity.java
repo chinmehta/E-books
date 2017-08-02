@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     TextView mTextView;
     int BOOK_LOADER_ID=0;
     String url;
+    LoaderManager loaderManager;
 
 
 
@@ -41,8 +42,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mTextView = (TextView)findViewById(R.id.empty_list_view);
 
         mListView.setAdapter(mAdapter);
-
-
+        loaderManager = getLoaderManager();
+        loaderManager.initLoader(BOOK_LOADER_ID, null, this);
 
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 url= getURL();
                 mAdapter.clear();
                 connect();
+
             }
         });
 
@@ -69,12 +71,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
             // Get a reference to the LoaderManager, in order to interact with loaders.
-            LoaderManager loaderManager = getLoaderManager();
+//            LoaderManager loaderManager = getLoaderManager();
 
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            loaderManager.initLoader(BOOK_LOADER_ID, null, this);
+
+            loaderManager.restartLoader(BOOK_LOADER_ID,null,this);
+//            QueryUtils.fetchBookData(url);
         } else {
 
             // Update empty state with no connection error message
@@ -114,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // data set. This will trigger the ListView to update.
         if ( BOOKS!= null && !BOOKS.isEmpty()) {
             mAdapter.addAll(BOOKS);
+//            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -123,4 +128,3 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 }
-

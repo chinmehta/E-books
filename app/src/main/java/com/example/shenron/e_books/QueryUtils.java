@@ -27,7 +27,7 @@ import static android.R.attr.y;
 public class QueryUtils
 {
 
-
+    public static final String TAG = "QueryUtils";
     /** Tag for the log messages */
     public static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
@@ -48,6 +48,7 @@ public class QueryUtils
 
         //Extract relevant books
         List<Book> books = extractBooks(jsonResponse);
+        Log.d(TAG,"no of books"+books!=null?books.size()+"":"-1");
         return books;
     }
 
@@ -143,7 +144,7 @@ public class QueryUtils
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
         try {
-            // build up a list of Earthquake objects with the corresponding data.
+            // build up a list of Books objects with the corresponding data.
             JSONObject baseJsonResponse = new JSONObject(JSON_RESPONSE);
             JSONArray bookArray = baseJsonResponse.getJSONArray("items");
 
@@ -152,19 +153,24 @@ public class QueryUtils
                 JSONObject currentBook = bookArray.getJSONObject(i);
                 JSONObject volumeInfo = currentBook.getJSONObject("volumeInfo");
                 String title = volumeInfo.getString("title");
-                JSONArray author = volumeInfo.getJSONArray("authors");
+                boolean isAuthorAvail = volumeInfo.has("authors");
+                if(isAuthorAvail){
+                    JSONArray author = volumeInfo.getJSONArray("authors");
 
-
-
-                if(author.length()>1)
-                {
-                    authorList = author.join(", ").replaceAll("\"", "");
-                }
-                else if (author.length() == 1) {
-                    authorList = author.getString(0);
-                } else if (author.length() == 0) {
+                    if(author.length()>1)
+                    {
+                        authorList = author.join(", ").replaceAll("\"", "");
+                    }
+                    else if (author.length() == 1) {
+                        authorList = author.getString(0);
+                    } else if (author.length() == 0) {
+                        authorList = "";
+                    }
+                }else {
                     authorList = "";
                 }
+//
+//                String author = volumeInfo.has("authors")?volumeInfo.getJSONArray("authors").getString(0):"N/A";
 
                 Book mBook = new Book(title,authorList);
                 books.add(mBook);
