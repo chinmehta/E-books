@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //            QueryUtils.fetchBookData(url);
         } else {
 
+            mTextView.setVisibility(View.VISIBLE);
             // Update empty state with no connection error message
             mTextView.setText("NO INTERNET CONNECTION");
         }
@@ -98,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             return  "https://www.googleapis.com/books/v1/volumes?"+"q=" + keyword;
         }
         else {
-            mTextView.setText("NO RESULT FOUND");
             mTextView.setVisibility(View.VISIBLE);
+            mTextView.setText("NO RESULT FOUND");
         }
         return keyword;
     }
@@ -113,12 +114,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<List<Book>> loader, List<Book> BOOKS) {
         mAdapter.clear();
+        mTextView.setVisibility(View.VISIBLE);
+        mTextView.setText("NO RESULT FOUND");
 
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if ( BOOKS!= null && !BOOKS.isEmpty()) {
             mAdapter.addAll(BOOKS);
-//            mAdapter.notifyDataSetChanged();
         }
     }
 
